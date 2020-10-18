@@ -47,6 +47,6 @@ public class PlayerOrder {
 
     @Override
     public String toString() {
-        return "playerID = " +  player.getPlayerID() + " action = " + action + " Coord list =  " + coords;
+        return "playerID = " +  player.getPlayer_id() + " action = " + action + " Coord list =  " + coords;
     }
 }

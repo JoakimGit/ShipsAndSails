@@ -32,5 +32,13 @@ public class PlayerOrderResult {
     public void setTurnResult(TurnResult turnResult) {
         this.turnResult = turnResult;
     }
+
+    @Override
+    public String toString() {
+        return "PlayerOrderResult{" +
+                "gameResult=" + gameResult +
+                ", turnResult=" + turnResult +
+                '}';
+    }
 }
 

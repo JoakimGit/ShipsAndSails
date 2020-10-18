@@ -1,0 +1,89 @@
+<!--Lavet af Joakim-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script th:src="@{/javascript/shootScript.js}" src="../static/javascript/shootScript.js"></script>
+    <link rel="stylesheet" th:href="@{/css/board.css}" href="../static/css/board.css" type="text/css">
+</head>
+<body>
+
+<div class="game window">
+    <h1 id="header_content">Ship and Sails Ohio!</h1>
+    <div class="game_window_left">
+        <section class="hex-grid-frame">
+            <tr th:each="hex: ${list}">
+                <div class="hex">
+                    <span class="test" th:onclick="|sendCoord(${hex.position.x}, ${hex.position.y})|" th:value="${hex.getPosition().x}">
+                        <input hidden readonly type="number" id="coordinateX" th:value="${hex.position.x}">
+                        <input hidden readonly type="number" id="coordinateY" th:value="${hex.position.y}">
+                        <img th:src="@{/img/Brig_transparent_small.png}"  src="../static/img/Brig_transparent_small.png" height="20px" width="80px"
+                            th:if="${hex.getPosition().x == ship1.getPosition().x && hex.getPosition().y == ship1.getPosition().y}" alt="ship" onclick="change()">
+                        <img th:src="@{/img/bigship.png}"  src="../static/img/bigship.png" height="20px" width="80px"
+                            th:if="${hex.getPosition().x == ship2.getPosition().x && hex.getPosition().y == ship2.getPosition().y}" alt="ship">
+                    </span>
+                </div>
+            </tr>
+        </section>
+    </div>
+    <div class="game_window_right">
+        <div class="text_info">
+            <h2>Ship1</h2>
+            <h2 th:text="${ship1.getName()}"></h2>
+            <h2>Speed</h2>
+            <h3 th:text="${ship1.getSpeed()}"></h3>
+            <h2>HP</h2>
+            <h3 th:text="${#numbers.formatDecimal(ship1.getHullQuality(), 1, 2)}"></h3>
+            <h2>Sejl</h2>
+            <h3 th:text="${ship1.getSailQuality()}"></h3>
+            <h2>Kanoner</h2>
+            <h3 th:text="${ship1.getAmountOfGuns()}"></h3>
+        </div>
+        <div class="text_info">
+            <!-- TODO lave så den skifter skip information i forhold til hvilken player det er -->
+            <h2>Ship2</h2>
+            <h2 th:text="${ship2.getName()}"></h2>
+            <h2>Speed</h2>
+            <h3 th:text="${ship2.getSpeed()}"></h3>
+            <h2>HP</h2>
+            <h3 th:text="${#numbers.formatDecimal(ship2.getHullQuality(), 1, 2)}"></h3>
+            <h2>Sejl</h2>
+            <h3 th:text="${ship2.getSailQuality()}"></h3>
+            <h2>Kanoner</h2>
+            <h3 th:text="${ship2.getAmountOfGuns()}"></h3>
+        </div>
+        <div class="info">
+            <p>Ship information</p>
+            <label for="p1moves">Player 1 moves:</label>
+            <span id="p1moves" th:text="${ship1.getSpeed()}"></span>
+            <span th:text="${'Direction: ' + ship1.getDirection()}"></span><br>
+            <label for="p2moves">Player 2 moves:</label>
+            <span id="p2moves" th:text="${ship2.getSpeed()}"></span>
+            <span th:text="${'Direction: ' + ship2.getDirection()}"></span><br>
+            <label for="turnplayer">Turn player:</label>
+            <span id="turnplayer">ship1</span>
+        </div>
+        <div>
+            <button onclick="send()">End turn</button>
+            <button onclick="end()">End round</button>
+            <button onclick="move()">Movement</button>
+            <button onclick="attack()">Attack</button>
+        </div>
+        <div>
+            <button id="enableShot">Shoot</button>
+        </div>
+    </div>
+</div>
+
+<div hidden>
+    <span id="ship1_id" th:text="${ship1.getShip_id()}"></span>
+    <span id="ship2_id" th:text="${ship2.getShip_id()}"></span>
+    <span id="game_id" th:text="${gameid}"></span>
+</div>
+
+<script th:inline="javascript" th:src="@{/javascript/game.js}" src="../static/javascript/game.js"></script>
+
+</body>
+</html>

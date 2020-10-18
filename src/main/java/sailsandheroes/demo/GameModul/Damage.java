@@ -56,10 +56,17 @@ public class Damage {
             }
         }
     // MOVEMENT GUYS
-    public static int collision(Ship ship, Ship ship2){
-        //Hull damage = 1/3 of actual hull value of the other ship, i.e
-        //Actual hull = previous actual hull - hull damage
-        //All ships involved take damage
-        return -1;
+    public static void collision(Ship ship1, Ship ship2) {
+        double ship1Hull = ship1.getHullQuality();
+        double ship2Hull = ship2.getHullQuality();
+
+        double damageDealtByShip1 = ship1Hull/3;
+        double damageDealtByShip2 = ship2Hull/3;
+
+        double newShip1Hull = ship1Hull - damageDealtByShip2;
+        double newShip2Hull = ship2Hull - damageDealtByShip1;
+
+        ship1.setHullQuality(newShip1Hull);
+        ship2.setHullQuality(newShip2Hull);
     }
 }

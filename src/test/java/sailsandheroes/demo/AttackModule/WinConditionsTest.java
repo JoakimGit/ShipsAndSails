@@ -16,8 +16,8 @@ class WinConditionsTest {
     @Test
     void checkWinCondition() {
         // Creates ships
-        Ship ship1 = new Ship(1, "William", new Point(1,1), 160.0, 66, 240, 120.0, 4, "front", "dansk","Cannon Balls");
-        Ship ship2 = new Ship(2, "William", new Point(1,1), 160.0, 66, 240, 120.0, 4, "front", "dansk","Cannon Balls");
+        Ship ship1 = new Ship(1, "William", new Point(1,1), 160.0, 66, 240, 120.0, 4, "front", 33 ,"Cannon Balls", 1);
+        Ship ship2 = new Ship(2, "William", new Point(1,1), 160.0, 66, 240, 120.0, 4, "front", 33 ,"Cannon Balls", 1);
         List<Player> list = new ArrayList<>();
 
         ArrayList<Ship> shipList = new ArrayList<>();

@@ -9,7 +9,7 @@ import java.awt.*;
 import static org.junit.jupiter.api.Assertions.*;
 // William
 class ShipTest {
-    public final Ship ship = new Ship(1, "William", new Point(1,1), 160.0, 66, 240, 120.0, 4, "front", "dansk","Cannon Balls");
+    public final Ship ship = new Ship(1, "William", new Point(1,1), 160.0, 66, 240, 120.0, 4, "front", 33 ,"Cannon Balls", 1);
 
     @Test
     void calculatePowerValue() {
@@ -19,9 +19,9 @@ class ShipTest {
 
     @Test
     void shipIdTest() {
-        assertEquals(1,ship.getId());
-        ship.setId(5);
-        assertEquals(5,ship.getId());
+        assertEquals(1,ship.getShip_id());
+        ship.setShip_id(5);
+        assertEquals(5,ship.getShip_id());
     }
 
     @Test

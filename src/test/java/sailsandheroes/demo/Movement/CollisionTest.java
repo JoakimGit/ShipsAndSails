@@ -20,13 +20,13 @@ class CollisionTest {
 
     @BeforeEach
     public void init() {
-        ship1.setId(1);
+        ship1.setShip_id(1);
         ship1Path.add(new Point(1, 1));
         ship1Path.add(new Point(2, 2));
         ship1Path.add(new Point(3, 3));
         ship1Path.add(new Point(4, 4));
 
-        ship2.setId(2);
+        ship2.setShip_id(2);
         ship2Path.add(new Point(1,1));
         ship2Path.add(new Point(2,2));
         ship2Path.add(new Point(3,3));
@@ -35,8 +35,8 @@ class CollisionTest {
 
     @Test
     void validateShipId() {
-       assertEquals(1, ship1.getId());
-       assertEquals(2, ship2.getId());
+       assertEquals(1, ship1.getShip_id());
+       assertEquals(2, ship2.getShip_id());
     }
 
     @Test

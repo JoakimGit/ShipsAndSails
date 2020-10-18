@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose Settings</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+    <br>
+    <h1>Vælg skib til spiller 1</h1>
+    <br>
+    <form action="/pregame" method="post">
+        <div class="form-group">
+            <label for="playerName"><b>Player 1 name:</b></label><br>
+            <input id="playerName" name="player1name" placeholder="Name" required>
+        </div>
+        <div class="form-group">
+            <label for="shiptype"><b>Skib:</b></label><br>
+            <select id="shiptype" name="ship1" required>
+                <option value="" selected hidden>Vælg en skibstype</option>
+                <option>Brig</option>
+                <option>Ship of the Line</option>
+                <option>Man at war</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="direction"><b>Retning:</b></label><br>
+            <select id="direction" name="direction1" required>
+                <option value="" selected hidden>Vælg en skibstype</option>
+                <option>North</option>
+                <option>Northeast</option>
+                <option>Southeast</option>
+                <option>South</option>
+                <option>Southwest</option>
+                <option>Northwest</option>
+            </select>
+        </div>
+
+        <br>
+        <h1>Vælg skib til spiller 2</h1>
+        <br>
+
+        <div class="form-group">
+            <label for="player2Name"><b>Player 2 name:</b></label><br>
+            <input id="player2Name" name="player2name" placeholder="Name" required>
+        </div>
+        <div class="form-group">
+            <label for="shiptype2"><b>Skib:</b></label><br>
+            <select id="shiptype2" name="ship2" required>
+                <option value="" selected hidden>Vælg en skibstype</option>
+                <option>Brig</option>
+                <option>Ship of the Line</option>
+                <option>Man at War</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="direction2"><b>Retning:</b></label><br>
+            <select id="direction2" name="direction2" required>
+                <option value="" selected hidden>Vælg en skibstype</option>
+                <option>North</option>
+                <option>Northeast</option>
+                <option>Southeast</option>
+                <option>South</option>
+                <option>Southwest</option>
+                <option>Northwest</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Opret</button>
+    </form>
+</div>
+
+</body>
+</html>

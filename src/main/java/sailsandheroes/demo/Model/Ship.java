@@ -5,7 +5,7 @@ import java.util.List;
 // Mona og Frederik
 public class Ship {
 
-    private Integer id;
+    private Integer ship_id;
     private String name;
     private Point position;
     private double hullQuality;
@@ -14,17 +14,17 @@ public class Ship {
     private double sailQuality;
     private Integer speed;
     private String direction;
-    private String nationality;
     private int powerValue;
     private String ammunition;
+    private Integer turns;
     private List<Point> path;
 
     public Ship() {
     }
 
-    public Ship(Integer id, String name, Point position, Double hullQuality, Integer amountOfGuns,
-                Integer amountOfSailors, Double sailQuality, Integer speed, String direction, String nationality, String ammunition) {
-        this.id = id;
+    public Ship(Integer ship_id, String name, Point position, double hullQuality, Integer amountOfGuns, Integer amountOfSailors, double sailQuality,
+                Integer speed, String direction, int powerValue, String ammunition, Integer turns) {
+        this.ship_id = ship_id;
         this.name = name;
         this.position = position;
         this.hullQuality = hullQuality;
@@ -33,8 +33,9 @@ public class Ship {
         this.sailQuality = sailQuality;
         this.speed = speed;
         this.direction = direction;
-        this.nationality = nationality;
+        this.powerValue = powerValue;
         this.ammunition = ammunition;
+        this.turns = turns;
     }
 
     // William
@@ -48,12 +49,12 @@ public class Ship {
         }
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getShip_id() {
+        return ship_id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setShip_id(Integer ship_id) {
+        this.ship_id = ship_id;
     }
 
     public String getName() {
@@ -120,14 +121,6 @@ public class Ship {
         this.direction = direction;
     }
 
-    public String getNationality() {
-        return nationality;
-    }
-
-    public void setNationality(String nationality) {
-        this.nationality = nationality;
-    }
-
     public int getPowerValue() {
         return powerValue;
     }
@@ -144,6 +137,14 @@ public class Ship {
         this.ammunition = ammunition;
     }
 
+    public Integer getTurns() {
+        return turns;
+    }
+
+    public void setTurns(Integer turns) {
+        this.turns = turns;
+    }
+
     public List<Point> getPath() {
         return path;
     }
@@ -155,7 +156,7 @@ public class Ship {
     @Override
     public String toString() {
         return "Ship{" +
-                "id=" + id +
+                "ship_id=" + ship_id +
                 ", name='" + name + '\'' +
                 ", position=" + position +
                 ", hullQuality=" + hullQuality +
@@ -164,9 +165,10 @@ public class Ship {
                 ", sailQuality=" + sailQuality +
                 ", speed=" + speed +
                 ", direction='" + direction + '\'' +
-                ", nationality='" + nationality + '\'' +
                 ", powerValue=" + powerValue +
                 ", ammunition='" + ammunition + '\'' +
+                ", turns=" + turns +
+                ", path=" + path +
                 '}';
     }
 }

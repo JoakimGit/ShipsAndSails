@@ -9,66 +9,39 @@ import java.util.List;
 //made by Frederik N
 public class Collision {
 
-    public void validateShipsCollisionPath(){
+    public boolean validateShipsCollisionPath(Ship ship1, Ship ship2) {
+        List<Point> ship1_path = ship1.getPath();
+        List<Point> ship2_path = ship2.getPath();
 
-        //Player 1 ship
-        Ship ship1 = new Ship();
-        ship1.setId(1);
-        ship1.setName("player1");
-        List<Point> ship1Path = new ArrayList<>();
-        ship1Path.add(new Point(1,1));
-        ship1Path.add(new Point(2,2));
-        ship1Path.add(new Point(3,3));
-        ship1Path.add(new Point(4,4));
-        ship1.setPath(ship1Path);
-
-        //Player 2 ship
-        Ship ship2 = new Ship();
-        ship1.setId(2);
-        ship2.setName("player2");
-        List<Point> ship2Path = new ArrayList<>();
-        ship2Path.add(new Point(1,1));
-        ship2Path.add(new Point(2,2));
-        ship2Path.add(new Point(0,3));
-        ship2Path.add(new Point(4,3));
-        ship2.setPath(ship2Path);
-
-        for (int i = 0; i < ship1Path.size(); i++) {
-            if(ship1.getPath().get(i).equals(ship2.getPath().get(i)))
-                System.out.println("Ship collision");
-            else
-                System.out.println("ship did not collied");
-            System.out.println(ship1.getPath().get(i));
-            System.out.println(ship2.getPath().get(i));
+        int shorterPath = Math.min(ship1_path.size(), ship2_path.size());
+        // Check to see if they collided at some point during their path
+        for (int i = 0; i < shorterPath; i++) {
+            if(ship1_path.get(i).equals(ship2_path.get(i))) {
+                System.out.println("Collision at: " + ship1_path.get(i));
+                if (i > 0) {
+                    ship1.setPosition(ship1_path.get(i-1));
+                    ship2.setPosition(ship2_path.get(i-1));
+                }
+                return true;
+            }
         }
-    }
+        // Check to see if they collided by ending up at the same hex
+        if(ship1_path.get(ship1_path.size()-1).equals(ship2_path.get(ship2_path.size()-1))) {
+            System.out.println("Collision at: " + ship1_path.get(ship1_path.size()-1));
 
-    public void validateShipsCollisionLastPosition() {
-        Ship ship1 = new Ship();
-        ship1.setId(1);
-        ship1.setName("player1");
-        List<Point> ship1Path = new ArrayList<>();
-        ship1Path.add(new Point(1,1));
-        ship1Path.add(new Point(2,2));
-        ship1Path.add(new Point(3,3));
-        ship1Path.add(new Point(4,4));
-        ship1.setPath(ship1Path);
+            int count = 2;
+            Point ship1LastHex = ship1_path.get(ship1_path.size()-count);
+            Point ship2LastHex = ship2_path.get(ship2_path.size()-count);
 
-        //Player 2 ship
-        Ship ship2 = new Ship();
-        ship1.setId(2);
-        ship2.setName("player2");
-        List<Point> ship2Path = new ArrayList<>();
-        ship2Path.add(new Point(1,1));
-        ship2Path.add(new Point(2,2));
-        ship2.setPath(ship2Path);
-
-        if(ship1.getPath().get(ship1.getPath().size()-1).equals(ship2.getPath().get(ship2.getPath().size()-1)))
-            System.out.println("Ship collision on end position");
-        else {
-            System.out.println("ship did not collied on end position");
-            System.out.println(ship1.getName() + "; " + ship1.getPath().get(ship1.getPath().size() - 1));
-            System.out.println(ship2.getName() + "; " + ship2.getPath().get(ship2.getPath().size() - 1));
+            while (ship1LastHex.equals(ship2LastHex)) {
+                count++;
+                ship1LastHex = ship1_path.get(ship1_path.size()-count);
+                ship2LastHex = ship2_path.get(ship2_path.size()-count);
+            }
+            ship1.setPosition(ship1LastHex);
+            ship2.setPosition(ship2LastHex);
+            return true;
         }
+        return false;
     }
 }

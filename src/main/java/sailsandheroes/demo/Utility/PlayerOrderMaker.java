@@ -10,13 +10,11 @@ public class PlayerOrderMaker {
 
     public static PlayerOrder createPlayerOrder(boolean isAction, List<Point> coords, String shipID, List<Player> players) throws NullPointerException{
         Action action = Action.MOVE;
-        if(!isAction){
-            action = Action.MOVE;
-        }else if(isAction){
+        if(isAction){
             action = Action.ATTACK;
         }
         for (Player player : players) {
-            if (Integer.parseInt(shipID) == player.getShipList().get(0).getId()) {
+            if (Integer.parseInt(shipID) == player.getShipList().get(0).getShip_id()) {
                 return new PlayerOrder(player, action, coords);
             }
         }

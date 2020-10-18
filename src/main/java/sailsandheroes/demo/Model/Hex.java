@@ -11,6 +11,7 @@ public class Hex {
     private Hex sE;
     private Hex s;
     private Hex sW;
+    private boolean edge;
 
     public Hex() {
         position =  new Point(0,0);
@@ -20,7 +21,7 @@ public class Hex {
         this.position = position;
     }
 
-    public Hex(Point position, Hex nW, Hex n, Hex nE, Hex sE, Hex s, Hex sW) {
+    public Hex(Point position, Hex nW, Hex n, Hex nE, Hex sE, Hex s, Hex sW, boolean edge) {
         this.position = position;
         this.nW = nW;
         this.n = n;
@@ -28,6 +29,7 @@ public class Hex {
         this.sE = sE;
         this.s = s;
         this.sW = sW;
+        this.edge = edge;
     }
 
     public Point getPosition() {
@@ -86,19 +88,27 @@ public class Hex {
         this.sW = sW;
     }
 
+    public boolean isEdge() {
+        return edge;
+    }
+
+    public void setEdge(boolean edge) {
+        this.edge = edge;
+    }
+
     public Hex getNeighbor(String direction) {
         switch (direction) {
-            case "N":
+            case "North":
                 return getN();
-            case "S":
+            case "South":
                 return getS();
-            case "NW":
+            case "Northwest":
                 return getnW();
-            case "NE":
+            case "Northeast":
                 return getnE();
-            case "SW":
+            case "Southwest":
                 return getsW();
-            case "SE":
+            case "Southeast":
                 return getsE();
         }
         return new Hex();
@@ -108,6 +118,7 @@ public class Hex {
     public String toString() {
         return "Hex{" +
                 "position=" + position +
+                ", edge=" + edge +
                 '}';
     }
 }
