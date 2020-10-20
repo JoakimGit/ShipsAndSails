@@ -33,25 +33,6 @@ public class PlayerRepository {
         return template.query(sql, rowMapper);
     }
 
-    /*public void createPlayer(Player p) {
-        String sql = "INSERT INTO player VALUES (?, ?)";
-        template.update(sql, p.getPlayer_id(), p.getPlayerName());
-    }*/
-
-    /*public int createPlayer(Player p) {
-        String sql = "INSERT INTO player (playerName, game_id) VALUES (?, ?)";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        template.update(conn -> {
-            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, p.getPlayerName());
-            ps.setInt(2, p.getGame_id());
-            return ps;
-        }, keyHolder);
-
-        return keyHolder.getKey().intValue();
-    }*/
-
     public int createPlayer(Player p) {
         String sql = "INSERT INTO player (playerName) VALUES (?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();

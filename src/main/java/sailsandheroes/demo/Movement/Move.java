@@ -6,6 +6,7 @@ import sailsandheroes.demo.Model.Ship;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 // Joakim
 public class Move {
@@ -13,6 +14,7 @@ public class Move {
     private final Board hexboard = new Board();
     private Hex startHex;
     private final Map<String, Integer> directions = new HashMap<>();
+    private String direction;
     {
         hexboard.fillBoard(12, 6);
         directions.put("North", 1);
@@ -26,113 +28,64 @@ public class Move {
     public Move() {
     }
 
-    private String validMove(Ship myShip, Point p) {
-        String direction = myShip.getDirection();
-        System.out.println("Current direction: " + direction);
-
-        if (!startHex.isEdge()) {
-            if (startHex.getNeighbor(direction).getPosition().equals(p.getLocation())) {
-                return direction;
-            }
-        }
-
-        int dirval = directions.get(direction);
-        try {
-            int turnLeftVal = dirval - 1;
-            if (turnLeftVal == 0) {
-                turnLeftVal = 6;
-            }
-            String turnleft = getKeyByValue(turnLeftVal);
-            if (startHex.getNeighbor(turnleft).getPosition().equals(p.getLocation())) {
-                direction = turnleft;
-                return direction;
-            }
-        }
-        catch (NullPointerException e) {
-            System.out.println("Checking left failed, lets try the other direction");
-        }
-        try {
-            int turnRightVal = dirval + 1;
-            if (turnRightVal == 7) {
-                turnRightVal = 1;
-            }
-            String turnright = getKeyByValue(turnRightVal);
-            if (startHex.getNeighbor(turnright).getPosition().equals(p.getLocation())) {
-                direction = turnright;
-                return direction;
-            }
-        }
-        catch (NullPointerException e) {
-            System.out.println("Checking right failed, lets try the other direction");
-        }
-
-        System.out.println("Ship " + myShip.getShip_id() + " cannot go to field " + p.getLocation() + " from position " + startHex.getPosition());
-
-        return "false";
-    }
-
     public boolean moveShip(Ship myShip) {
-
         findStartingHex(myShip);
+        direction = myShip.getDirection();
 
         for (Point p : myShip.getPath()) {
-            String direction = validMove(myShip, p);
-            if (!(direction.equals("false"))) {
-                myShip.setDirection(direction);
-            }
-            if (direction.equals("false")) {
+            boolean isValidMove = validMove(p);
+            if (!isValidMove) {
                 return false;
             }
+        }
+        return true;
+    }
 
-            switch (direction) {
-                case "North":
-                    if (startHex.getN().getPosition().equals(p)) {
-                        startHex = findHexFromPoint(p);
-                        System.out.println("You've successfully moved north");
-                    }
-                    else System.out.println("You cannot sail north");
-                    break;
-                case "South":
-                    if (startHex.getS().getPosition().equals(p)) {
-                        startHex = findHexFromPoint(p);
-                        System.out.println("You've successfully moved south");
-                    }
-                    else System.out.println("You cannot sail south");
-                    break;
-                case "Northwest":
-                    if (startHex.getnW().getPosition().equals(p)) {
-                        startHex = findHexFromPoint(p);
-                        System.out.println("You've successfully moved northwest");
-                    }
-                    else System.out.println("You cannot sail northwest");
-                    break;
-                case "Northeast":
-                    if (startHex.getnE().getPosition().equals(p)) {
-                        startHex = findHexFromPoint(p);
-                        System.out.println("You've successfully moved northeast");
-                    }
-                    else System.out.println("You cannot sail northeast");
-                    break;
-                case "Southwest":
-                    if (startHex.getsW().getPosition().equals(p)) {
-                        startHex = findHexFromPoint(p);
-                        System.out.println("You've successfully moved southwest");
-                    }
-                    else System.out.println("You cannot sail southwest");
-                    break;
-                case "Southeast":
-                    if (startHex.getsE().getPosition().equals(p)) {
-                        System.out.println("You've successfully moved southeast");
-                        startHex = findHexFromPoint(p);
-                    }
-                    else {
-                        System.out.println("You cannot sail southeast");
-                    }
-                    break;
+    private boolean validMove(Point p) {
+        System.out.println("Current direction: " + direction);
+
+        if (travel(p, direction)) return true;
+
+        String turnLeftDirection = findLeftDirection();
+        if (travel(p, turnLeftDirection)) return true;
+
+        String turnRightDirection = findRightDirection();
+        if (travel(p, turnRightDirection)) return true;
+
+        System.out.println("Ship cannot go to field " + p.getLocation() + " from position " + startHex.getPosition());
+
+        return false;
+    }
+
+    private boolean travel(Point p, String direction) {
+        try {
+            if (startHex.getNeighbor(direction).getPosition().equals(p.getLocation())) {
+                startHex = startHex.getNeighbor(direction);
+                this.direction = direction;
+                System.out.println("You've succesfully moved " + direction);
+                return true;
             }
         }
-        //myShip.setPosition(startHex.getPosition());
-        return true;
+        catch (NullPointerException e) {
+            System.out.println("Cannot move " + direction + " from here");
+        }
+        return false;
+    }
+
+    private String findLeftDirection() {
+        int turnLeftVal = directions.get(direction) - 1;
+        if (turnLeftVal == 0) {
+            turnLeftVal = 6;
+        }
+        return getKeyByValue(turnLeftVal);
+    }
+
+    private String findRightDirection() {
+        int turnRightVal = directions.get(direction) + 1;
+        if (turnRightVal == 7) {
+            turnRightVal = 1;
+        }
+        return getKeyByValue(turnRightVal);
     }
 
     private void findStartingHex(Ship myShip) {
@@ -144,16 +97,6 @@ public class Move {
         }
     }
 
-    private Hex findHexFromPoint(Point p) {
-        for (Hex hex : hexboard.getHexGrid()) {
-            if (hex.getPosition().x == p.x && hex.getPosition().y == p.y) {
-                return hex;
-            }
-        }
-        System.out.println("Couldn't find hex with these coords.");
-        return new Hex();
-    }
-
     private String getKeyByValue(int value) {
         for (Map.Entry<String, Integer> entry : directions.entrySet()) {
             if (value == entry.getValue()) {
@@ -162,4 +105,30 @@ public class Move {
         }
         return null;
     }
+
+    public void setNewShipDirection(Ship ship) {
+        findStartingHex(ship);
+        direction = ship.getDirection();
+
+        for (Point p : ship.getPath()) {
+            if (travel(p, direction)) continue;
+
+            String turnLeftDirection = findLeftDirection();
+            if (travel(p, turnLeftDirection)) continue;
+
+            String turnRightDirection = findRightDirection();
+            travel(p, turnRightDirection);
+        }
+        ship.setDirection(direction);
+    }
+
+    /*private Hex findHexFromPoint(Point p) {
+        for (Hex hex : hexboard.getHexGrid()) {
+            if (hex.getPosition().x == p.x && hex.getPosition().y == p.y) {
+                return hex;
+            }
+        }
+        System.out.println("Couldn't find hex with these coords.");
+        return new Hex();
+    }*/
 }

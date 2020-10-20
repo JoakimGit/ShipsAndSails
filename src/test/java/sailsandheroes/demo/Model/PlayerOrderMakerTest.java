@@ -14,18 +14,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerOrderMakerTest {
     boolean isAction;
-    List<Point> coords;
+    Point target;
     String shipID;
     List<Player> players;
 
     @BeforeEach
     public void setupForTests(){
         isAction = true;
-        coords = new ArrayList<>();
+        target = new Point(0,5);
         players = new ArrayList<>();
-        for(int i = 0; i < 5; i++){
-            coords.add(new Point(0,i));
-        }
         for(int j = 1; j <= 2; j++){
             Ship ship = new Ship();
             ship.setShip_id(j);
@@ -39,13 +36,13 @@ class PlayerOrderMakerTest {
 
     @Test
     public void createPOtest1() throws NullPointerException{
-        PlayerOrder playerOrder = PlayerOrderMaker.createPlayerOrder(isAction,coords,shipID,players);
+        PlayerOrder playerOrder = PlayerOrderMaker.createPlayerOrder(isAction,target,shipID,players);
         assertEquals(Action.MOVE,playerOrder.getAction());
     }
 
     @Test
     public void createPOtest2() throws NullPointerException{
-        PlayerOrder playerOrder = PlayerOrderMaker.createPlayerOrder(isAction,coords,shipID,players);
+        PlayerOrder playerOrder = PlayerOrderMaker.createPlayerOrder(isAction,target,shipID,players);
         assertEquals(Action.ATTACK,playerOrder.getAction());
     }
 

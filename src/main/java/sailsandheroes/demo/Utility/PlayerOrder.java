@@ -10,15 +10,20 @@ public class PlayerOrder {
 
     private Player player;
     private Action action;
-    private List<Point> coords;
+    private Point target;
 
     public PlayerOrder() {
     }
 
-    public PlayerOrder(Player player, Action action, List<Point> coords) {
+    public PlayerOrder(Player player, boolean action) {
         this.player = player;
-        this.action = action;
-        this.coords = coords;
+        this.action = action ? Action.ATTACK : Action.MOVE;
+    }
+
+    public PlayerOrder(Player player, boolean action, Point target) {
+        this.player = player;
+        this.action = action ? Action.ATTACK : Action.MOVE;
+        this.target = target;
     }
 
     public Player getPlayer() {
@@ -37,16 +42,16 @@ public class PlayerOrder {
         this.action = action;
     }
 
-    public List<Point> getCoords() {
-        return coords;
+    public Point getTarget() {
+        return target;
     }
 
-    public void setCoords(List<Point> coords) {
-        this.coords = coords;
+    public void setTarget(Point target) {
+        this.target = target;
     }
 
     @Override
     public String toString() {
-        return "playerID = " +  player.getPlayer_id() + " action = " + action + " Coord list =  " + coords;
+        return "playerID = " +  player.getPlayer_id() + " action = " + action + " Attack target =  " + target;
     }
 }

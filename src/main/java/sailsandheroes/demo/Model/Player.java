@@ -31,7 +31,7 @@ public class Player {
         return shipList;
     }
 
-    public void setShip(List shipList) {
+    public void setShip(List<Ship> shipList) {
         this.shipList = shipList;
     }
 

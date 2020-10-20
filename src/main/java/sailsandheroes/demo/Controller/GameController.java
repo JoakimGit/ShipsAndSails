@@ -35,7 +35,7 @@ public class GameController {
     // Modtag GameResult enum fra Attack
     // Kommuniker op igen til Game eller CommmunicationController
 
-    public PlayerOrderResult recievePlayer(Player player, boolean isAttack){
+    /*public PlayerOrderResult receivePlayer(Player player, boolean isAttack){
         if (!isAttack) {
             action = Action.MOVE;
         } else action = Action.ATTACK;
@@ -44,10 +44,28 @@ public class GameController {
 
         PlayerOrderResult playerOrderResult;
         return playerOrderResult = routeAndAskForGameResult();
+    }*/
+
+    public PlayerOrderResult receivePlayerOrder(PlayerOrder playerOrder){
+        action = playerOrder.getAction();
+        player = playerOrder.getPlayer();
+        playerNumber = designatePlayerNumber();
+
+        return routeAndAskForGameResult();
     }
 
     public PlayerOrderResult routeAndAskForGameResult(){
         PlayerOrderResult playerOrderResult = new PlayerOrderResult();
+        if (!playerList.contains(player)) {
+            playerList.add(player);
+        }
+        else if (playerList.contains(player)) {
+            for (Player myPlayer : playerList) {
+                if (myPlayer.getPlayer_id() == player.getPlayer_id()) {
+                    myPlayer.getShipList().get(0).setPath(player.getShipList().get(0).getPath());
+                }
+            }
+        }
         switch (playerNumber) {
             case PLAYER1:
                 switch (action){
@@ -66,8 +84,8 @@ public class GameController {
                         return playerOrderResult;
 
                     case ATTACK:
-                        playerList = new ArrayList<>();
-                        playerList.add(player);
+
+                        player1TurnSuccess = true;
 
                         System.out.println("GameController: player 1 til angreb din landkrabbe");
 
@@ -87,28 +105,28 @@ public class GameController {
                         if (player1TurnSuccess) {
                             Ship player1Ship = playerList.get(0).getShipList().get(0);
                             Ship player2Ship = playerList.get(1).getShipList().get(0);
-                            System.out.println(player1Ship);
-                            System.out.println(player2Ship);
                             boolean isCollision = movementService.checkCollision(player1Ship, player2Ship);
 
                             if (!isCollision) {
                                 Point ship1dest = player1Ship.getPath().get(player1Ship.getPath().size()-1);
                                 Point ship2dest = player2Ship.getPath().get(player2Ship.getPath().size()-1);
 
+                                movementService.setNewShipDirection(player1Ship);
+                                movementService.setNewShipDirection(player2Ship);
                                 player1Ship.setPosition(ship1dest);
                                 player2Ship.setPosition(ship2dest);
                             }
                             shipService.updateShip(player1Ship);
                             shipService.updateShip(player2Ship);
-                            playerList.clear();
+
                         }
                         return playerOrderResult;
 
                     case ATTACK:
-                        playerList.add(player);
-                        playerOrderResult.setGameResult(AttackMain.informationToAttack(playerList));
-                        System.out.println("GameController: player 2 til angreb din landkrabbe");
 
+                        //playerOrderResult.setGameResult(AttackMain.informationToAttack(playerList));
+                        System.out.println("GameController: player 2 til angreb din landkrabbe");
+                        
                         return playerOrderResult;
                 }
                 break;

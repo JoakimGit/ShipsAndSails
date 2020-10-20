@@ -10,23 +10,29 @@ $(document).ready(function () {
     $(".hex span").on('click', function(){
         var tplayer = $("#turnplayer");
 
-        if (tplayer.text() === "ship1") {
-            var p1movesleft = $("#p1moves").text();
-            var p1count = Number(p1movesleft);
-            if (p1count > 0) {
-                $(this).css({backgroundColor: 'yellow'});
-                if (p1movesleft !== "0") {
-                    $("#p1moves").text(p1movesleft - 1);
+        if (actionBool) {
+            $(this).css({backgroundColor: 'red'});
+            actionBool = false;
+        }
+        else {
+            if (tplayer.text() === "ship1") {
+                var p1movesleft = $("#p1moves").text();
+                var p1count = Number(p1movesleft);
+                if (p1count > 0) {
+                    $(this).css({backgroundColor: 'yellow'});
+                    if (p1movesleft !== "0") {
+                        $("#p1moves").text(p1movesleft - 1);
+                    }
                 }
             }
-        }
-        else if (tplayer.text() === "ship2") {
-            var p2movesleft = $("#p2moves").text();
-            var p2count = Number(p2movesleft)
-            if (p2count > 0) {
-                $(this).css({backgroundColor: 'green'});
-                if (p2movesleft !== "0") {
-                    $("#p2moves").text(p2movesleft - 1);
+            else if (tplayer.text() === "ship2") {
+                var p2movesleft = $("#p2moves").text();
+                var p2count = Number(p2movesleft)
+                if (p2count > 0) {
+                    $(this).css({backgroundColor: 'green'});
+                    if (p2movesleft !== "0") {
+                        $("#p2moves").text(p2movesleft - 1);
+                    }
                 }
             }
         }
@@ -37,7 +43,7 @@ function sendCoord(posx, posy) {
     var tplay = $("#turnplayer").text();
     if (tplay === "ship1") {
         var p1moves = $("#p1moves");
-        if (p1moves.text() === "0") {
+        if (p1moves.text() === "0" && !actionBool) {
             alert("You have no more moves left")
             return;
         }
@@ -46,7 +52,7 @@ function sendCoord(posx, posy) {
     }
     else if (tplay === "ship2") {
         var p2moves = $("#p2moves");
-        if (p2moves.text() === "0") {
+        if (p2moves.text() === "0" && !actionBool) {
             alert("You have no more moves left")
             return;
         }
@@ -60,7 +66,6 @@ function send() {
     var tplayer = $("#turnplayer");
 
     if (tplayer.text() === "ship1") {
-
         coords.push(actionBool);
         coords.push(gameID);
         tplayer.text("ship2");
@@ -71,7 +76,6 @@ function send() {
         xhttp.send(coords);
     }
     else if (tplayer.text() === "ship2"){
-
         coords2.push(actionBool);
         coords2.push(gameID);
         tplayer.text("ship1");
@@ -94,6 +98,13 @@ function move() {
 
 function attack() {
     actionBool = true;
+    var tplayer = $("#turnplayer");
+    if (tplayer.text() === "ship1") {
+        coords.push(actionBool);
+    }
+    else if (tplayer.text() === "ship2"){
+        coords2.push(actionBool);
+    }
 }
 
 /*

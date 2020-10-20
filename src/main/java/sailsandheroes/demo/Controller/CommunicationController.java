@@ -9,12 +9,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import sailsandheroes.demo.Enums.TurnResult;
 import sailsandheroes.demo.GameModul.Game;
 import sailsandheroes.demo.Model.Player;
 import sailsandheroes.demo.Service.GameService;
 import sailsandheroes.demo.Service.MovementService;
 import sailsandheroes.demo.Service.PlayerService;
 import sailsandheroes.demo.Service.ShipService;
+import sailsandheroes.demo.Utility.PlayerOrder;
+import sailsandheroes.demo.Utility.PlayerOrderResult;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -78,37 +81,78 @@ public class CommunicationController {
 
     @PostMapping("/movement")
     public String movement(@RequestBody String data, RedirectAttributes redirect) {
-
         String[] moves = data.split(",");
         int shipID = Integer.parseInt(moves[0]);
         int gameID = Integer.parseInt(moves[moves.length-1]);
-        boolean action = Boolean.parseBoolean(moves[moves.length-2]);
-        List<Point> shipPath = findPath(moves);
-
         int playerID = playerService.fetchPlayerIDByShipID(shipID);
+
+        List<Point> shipPath = findPath(moves);
+        List<String> targetList = findTarget(moves);
+
         Player player = playerService.fetchPlayerById(playerID);
         player.getShipList().get(0).setPath(shipPath);
+        PlayerOrder playerOrderMove = makePlayerOrderMove(player);
+        PlayerOrder playerOrderAttack = makePlayerOrderAttack(player, targetList);
 
         System.out.println(player);
         System.out.println(shipPath);
-        System.out.println("Action is " + (action ? "attack" : "move"));
-
-        System.out.println("Gamecontroller returns: " + gameController.recievePlayer(player, action));
-
+        PlayerOrderResult turnResult = gameController.receivePlayerOrder(playerOrderMove);
+        if (turnResult.getTurnResult() == TurnResult.SUCCESSFUL && playerOrderAttack != null) {
+            gameController.receivePlayerOrder(playerOrderAttack);
+        }
 
         redirect.addAttribute("gameID", gameID);
         return "redirect:/board";
     }
 
-    private List<Point> findPath(String[] arrayPath) {
+    private List<Point> findPath(String[] testArray) {
         List<Point> myPoints = new ArrayList<>();
-        arrayPath = Arrays.copyOf(arrayPath, arrayPath.length-2);
-        for (int i = 1, j = 2; i < arrayPath.length; i+=2) {
-            int x = Integer.parseInt(arrayPath[i]);
-            int y = Integer.parseInt(arrayPath[j]);
+        for (int i = 1, j = 2; i < testArray.length; i+=2) {
+            if (testArray[i].length() > 3) {
+                break;
+            }
+            int x = Integer.parseInt(testArray[i]);
+            int y = Integer.parseInt(testArray[j]);
             myPoints.add(new Point(x, y));
             j += 2;
         }
         return myPoints;
+    }
+
+    private List<String> findTarget(String[] array) {
+        List<String> targetList = new ArrayList<>();
+        int countBools = 0;
+        for (String s : array) {
+            if (s.length() > 3 && countBools < 1) {
+                targetList.add(s);
+                countBools++;
+                continue;
+            }
+            if (s.length() < 3 && countBools > 0 ) {
+                targetList.add(s);
+            }
+        }
+        return targetList;
+    }
+
+    private PlayerOrder makePlayerOrderAttack(Player player, List<String> attackList) {
+        boolean isAttack;
+        Point target = null;
+        PlayerOrder playerOrderAttack = null;
+
+        if (attackList.size() > 3) {
+            isAttack = Boolean.parseBoolean(attackList.get(0));
+            target = new Point(Integer.parseInt(attackList.get(1)), Integer.parseInt(attackList.get(2)));
+            playerOrderAttack = new PlayerOrder(player, isAttack, target);
+        }
+
+        return playerOrderAttack;
+    }
+
+    private PlayerOrder makePlayerOrderMove(Player player) {
+        boolean isMove = false;
+        Point target = null;
+
+        return new PlayerOrder(player, isMove, target);
     }
 }
