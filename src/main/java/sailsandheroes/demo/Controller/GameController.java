@@ -21,8 +21,12 @@ public class GameController {
     private Action action;
     private PlayerNumber playerNumber;
     private Player player = new Player();
-    private List<Player> playerList = new ArrayList<>();
-    private boolean player1TurnSuccess;
+    private final List<Player> playerList = new ArrayList<>();
+    private final List<PlayerOrder> playerOrders = new ArrayList<>();
+    private Point p1target = new Point();
+    private boolean player1MoveSuccess;
+    private boolean player2MoveSuccess;
+
 
     @Autowired
     MovementService movementService;
@@ -35,21 +39,14 @@ public class GameController {
     // Modtag GameResult enum fra Attack
     // Kommuniker op igen til Game eller CommmunicationController
 
-    /*public PlayerOrderResult receivePlayer(Player player, boolean isAttack){
-        if (!isAttack) {
-            action = Action.MOVE;
-        } else action = Action.ATTACK;
-        this.player = player;
-        playerNumber = designatePlayerNumber();
-
-        PlayerOrderResult playerOrderResult;
-        return playerOrderResult = routeAndAskForGameResult();
-    }*/
-
     public PlayerOrderResult receivePlayerOrder(PlayerOrder playerOrder){
         action = playerOrder.getAction();
         player = playerOrder.getPlayer();
         playerNumber = designatePlayerNumber();
+
+        if (!playerOrders.contains(playerOrder)) {
+            playerOrders.add(playerOrder);
+        }
 
         return routeAndAskForGameResult();
     }
@@ -75,19 +72,23 @@ public class GameController {
 
                         if(!movementService.Move(player1Ship)){
                             playerOrderResult.setTurnResult(TurnResult.FAILED);
-                            player1TurnSuccess = false;
+                            player1MoveSuccess = false;
                             return playerOrderResult;
                         }
 
-                        player1TurnSuccess = true;
+                        player1MoveSuccess = true;
 
                         return playerOrderResult;
 
                     case ATTACK:
 
-                        player1TurnSuccess = true;
-
                         System.out.println("GameController: player 1 til angreb din landkrabbe");
+
+                        for (PlayerOrder po : playerOrders) {
+                            if (po.getPlayer().getPlayer_id() % 2 != 0 && po.getAction() == Action.ATTACK) {
+                                p1target = po.getTarget();
+                            }
+                        }
 
                         return playerOrderResult;
                 }
@@ -100,9 +101,12 @@ public class GameController {
 
                         if(!movementService.Move(player.getShipList().get(0))){
                             playerOrderResult.setTurnResult(TurnResult.FAILED);
+                            player2MoveSuccess = false;
                             return playerOrderResult;
                         }
-                        if (player1TurnSuccess) {
+                        player2MoveSuccess = true;
+
+                        if (player1MoveSuccess) {
                             Ship player1Ship = playerList.get(0).getShipList().get(0);
                             Ship player2Ship = playerList.get(1).getShipList().get(0);
                             boolean isCollision = movementService.checkCollision(player1Ship, player2Ship);
@@ -124,9 +128,18 @@ public class GameController {
 
                     case ATTACK:
 
-                        //playerOrderResult.setGameResult(AttackMain.informationToAttack(playerList));
                         System.out.println("GameController: player 2 til angreb din landkrabbe");
-                        
+
+                        if (player1MoveSuccess && player2MoveSuccess) {
+                            Point p2target = new Point();
+                            for (PlayerOrder po : playerOrders) {
+                                if (po.getPlayer().getPlayer_id() % 2 == 0 && po.getAction() == Action.ATTACK) {
+                                    p2target = po.getTarget();
+                                }
+                            }
+                            playerOrderResult.setGameResult(AttackMain.informationToAttack(playerList, p1target, p2target));
+                        }
+
                         return playerOrderResult;
                 }
                 break;
@@ -146,4 +159,15 @@ public class GameController {
         }
         return null;
     }
+
+    /*public PlayerOrderResult receivePlayer(Player player, boolean isAttack){
+        if (!isAttack) {
+            action = Action.MOVE;
+        } else action = Action.ATTACK;
+        this.player = player;
+        playerNumber = designatePlayerNumber();
+
+        PlayerOrderResult playerOrderResult;
+        return playerOrderResult = routeAndAskForGameResult();
+    }*/
 }

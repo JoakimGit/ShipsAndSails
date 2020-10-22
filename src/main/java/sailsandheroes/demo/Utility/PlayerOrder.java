@@ -51,6 +51,16 @@ public class PlayerOrder {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (o instanceof PlayerOrder) {
+            PlayerOrder playerOrder2 = (PlayerOrder) o;
+            return player == playerOrder2.player && action == playerOrder2.getAction();
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public String toString() {
         return "playerID = " +  player.getPlayer_id() + " action = " + action + " Attack target =  " + target;
     }
