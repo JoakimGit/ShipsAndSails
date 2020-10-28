@@ -6,10 +6,11 @@ import java.util.Random;
 
 public class Damage {
     // Benjamin
-    public static int calculate(Ship shooter, Ship enemy, double hitChance){
+    public static void calculate(Ship shooter, Ship enemy, double hitChance){
         //damage formular (p. 16)
         // hitChance * Firing Power
         double damage = hitChance * shooter.getPowerValue();
+        System.out.println("Ship was hit! Damage is: " + damage);
 
         switch(shooter.getAmmunition()){
             case "Cannon Ball":
@@ -22,11 +23,12 @@ public class Damage {
                 enemy.setAmountOfSailors((int)(enemy.getAmountOfSailors() - damage));
                 break;
         }
-        return -1;
     }
     // William
-    public static void criticalShot(Ship shooter, Ship enemy, Random random){
+    public static void criticalShot(Ship shooter, Ship enemy){
+        Random random = new Random();
         int crit = random.nextInt(20)+1;
+        System.out.println("It's a critical hit! Crit roll is: " + crit);
             switch(shooter.getAmmunition()){
                 // Ship explodes and hull health is set to 0
                 case "Cannon Ball":

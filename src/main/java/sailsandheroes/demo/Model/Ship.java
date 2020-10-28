@@ -42,9 +42,9 @@ public class Ship {
     public void calculatePowerValue(){
         int guns = amountOfGuns / 2;
         int sailorPrGun = amountOfSailors/3;
-        if(guns < sailorPrGun){
+        if(guns <= sailorPrGun){
             powerValue = guns;
-        }else if(guns > sailorPrGun){
+        }else {
             powerValue = sailorPrGun;
         }
     }

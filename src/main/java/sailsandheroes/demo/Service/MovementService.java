@@ -18,9 +18,6 @@ public class MovementService {
     private final Move move;
     private final Collision collision;
 
-    @Autowired
-    ShipService shipService;
-
     public MovementService() {
         move = new Move();
         collision = new Collision();
@@ -52,8 +49,4 @@ public class MovementService {
     public void setNewShipDirection(Ship ship) {
         move.setNewShipDirection(ship);
     }
-
-
-
-
 }

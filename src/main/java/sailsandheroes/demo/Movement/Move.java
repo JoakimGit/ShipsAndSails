@@ -121,14 +121,4 @@ public class Move {
         }
         ship.setDirection(direction);
     }
-
-    /*private Hex findHexFromPoint(Point p) {
-        for (Hex hex : hexboard.getHexGrid()) {
-            if (hex.getPosition().x == p.x && hex.getPosition().y == p.y) {
-                return hex;
-            }
-        }
-        System.out.println("Couldn't find hex with these coords.");
-        return new Hex();
-    }*/
 }

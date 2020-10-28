@@ -36,6 +36,7 @@ public class PlayerService {
         Ship newShip = shipService.fetchShipByName(shipname);
         newShip.setDirection(direction);
         newShip.setPosition(start);
+        newShip.setAmmunition("Cannon Ball");
         shipService.createShip(newShip);
         int shipID = shipService.findNewestReservationId();
         newShip.setShip_id(shipID);

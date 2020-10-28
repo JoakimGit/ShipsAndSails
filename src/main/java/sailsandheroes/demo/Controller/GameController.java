@@ -1,6 +1,7 @@
 package sailsandheroes.demo.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import sailsandheroes.demo.AttackModule.WinConditions;
 import sailsandheroes.demo.Enums.*;
 import sailsandheroes.demo.Enums.PlayerNumber;
 import sailsandheroes.demo.AttackModule.AttackMain;
@@ -137,9 +138,11 @@ public class GameController {
                                     p2target = po.getTarget();
                                 }
                             }
-                            playerOrderResult.setGameResult(AttackMain.informationToAttack(playerList, p1target, p2target));
+                            List<Boolean> shipsHit = AttackMain.informationToAttack(playerList, p1target, p2target);
+                            if (shipsHit.get(0)) shipService.updateShip(playerList.get(1).getShipList().get(0));
+                            if (shipsHit.get(1)) shipService.updateShip(playerList.get(0).getShipList().get(0));
+                            playerOrderResult.setGameResult(WinConditions.checkWinCondition(playerList));
                         }
-
                         return playerOrderResult;
                 }
                 break;
